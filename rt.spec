@@ -31,24 +31,24 @@
 #	Default: without (doesn't work in chroots.)
 %bcond_with tests
 
-%define RT3_BINDIR		%{_sbindir}
-%define RT3_LIBDIR		%{perl_vendorlib}
-%define RT3_WWWDIR		%{_datadir}/rt3/html
-%define RT3_LOGDIR		/var/log/rt3
-%define RT3_CACHEDIR		/var/cache/rt3
-%define RT3_LOCALSTATEDIR	/var/lib/rt3
+%define RT_BINDIR		%{_sbindir}
+%define RT_LIBDIR		%{perl_vendorlib}
+%define RT_WWWDIR		%{_datadir}/rt/html
+%define RT_LOGDIR		/var/log/rt
+%define RT_CACHEDIR		/var/cache/rt
+%define RT_LOCALSTATEDIR	/var/lib/rt
 
 Summary:	Request tracker 3
-Name:		rt3
+Name:		rt
 Version:	3.8.1
 Release:	%mkrel 5
 Group:		System/Servers
 License:	GPLv2+
 URL:		http://www.bestpractical.com/rt
 Source0:	http://www.bestpractical.com/pub/rt/release/rt-%{version}.tar.gz
-Source3:	rt3.conf.in
+Source3:	rt.conf.in
 Source4:	README.fedora.in
-Source5:	rt3.logrotate.in
+Source5:	rt.logrotate.in
 Patch0:		rt-3.8.1-config.diff
 Patch1:		rt-3.4.1-I18N.diff
 Patch2:		rt-3.8.1-Makefile.diff
@@ -165,7 +165,7 @@ Provides: perl(RT::Shredder::Record)
 Provides: perl(RT::Shredder::Transaction)
 Provides: perl(RT::Tickets_Overlay_SQL)
 # Split out. Technically, not actually necessary, but ... let's keep it for now.
-Requires: rt3-mailgate
+Requires: rt-mailgate
 %if %mdkversion < 201010
 Requires(pre): rpm-helper
 Requires(postun): rpm-helper
@@ -178,7 +178,7 @@ to intelligently and efficiently manage tasks, issues, and requests submitted
 by a community of users.
 
 %package mailgate
-Summary: rt3's mailgate utility
+Summary: rt's mailgate utility
 Group:   System/Servers
 # rpm doesn't catch these:
 Requires:	perl(Pod::Usage)
@@ -191,10 +191,10 @@ Requires:	perl(HTML::FormatText)
 %prep
 %setup -q -n rt-%{version}
 
-sed -e 's,@RT3_CACHEDIR@,%{RT3_CACHEDIR},' %{SOURCE4} \
+sed -e 's,@RT_CACHEDIR@,%{RT_CACHEDIR},' %{SOURCE4} \
   > README.fedora
-sed -e 's,@RT3_LOGDIR@,%{RT3_LOGDIR},' %{SOURCE5} \
-  > rt3.logrotate
+sed -e 's,@RT_LOGDIR@,%{RT_LOGDIR},' %{SOURCE5} \
+  > rt.logrotate
 
 # Fixup the tarball shipping with broken permissions
 find . \( -name '*.pm' -o -name '*.pm.in' -o -name '*.po' -o -name '*.pod' \) \
@@ -236,17 +236,17 @@ cat << \EOF >> config.layout
 
 # Mandriva directory layout.
 <Layout Mandriva>
-  bindir:		%{RT3_BINDIR}
-  sysconfdir:		%{_sysconfdir}/rt3
-  libdir:		%{RT3_LIBDIR}
+  bindir:		%{RT_BINDIR}
+  sysconfdir:		%{_sysconfdir}/rt
+  libdir:		%{RT_LIBDIR}
   manualdir:		${datadir}/doc
-  localstatedir:	%{RT3_LOCALSTATEDIR}
-  htmldir:		%{RT3_WWWDIR}
-  logfiledir:		%{RT3_LOGDIR}
-  masonstatedir:	%{RT3_CACHEDIR}/mason_data
-  sessionstatedir:	%{RT3_CACHEDIR}/session_data
-  customdir:		%{_prefix}/local/lib/rt3
-  custometcdir:		%{_prefix}/local/etc/rt3
+  localstatedir:	%{RT_LOCALSTATEDIR}
+  htmldir:		%{RT_WWWDIR}
+  logfiledir:		%{RT_LOGDIR}
+  masonstatedir:	%{RT_CACHEDIR}/mason_data
+  sessionstatedir:	%{RT_CACHEDIR}/session_data
+  customdir:		%{_prefix}/local/lib/rt
+  custometcdir:		%{_prefix}/local/etc/rt
   customhtmldir:	${customdir}/html
   customlexdir:		${customdir}/po
   customlibdir:		${customdir}/lib
@@ -270,7 +270,7 @@ Makefile.in
     --enable-layout=Mandriva \
     --with-modperl2 \
     --with-web-handler=modperl2 \
-    --libdir=%{RT3_LIBDIR} \
+    --libdir=%{RT_LIBDIR} \
     %{?with_graphviz:--enable-graphviz}%{!?with_graphviz:--disable-graphviz} \
     %{?with_gd:--enable-gd}%{!?with_gd:--disable-gd} \
     %{?with_gpg:--enable-gpg}%{!?with_gpg:--disable-gpg} \
@@ -283,70 +283,70 @@ pod2man bin/rt-mailgate > bin/rt-mailgate.1
 pod2man bin/mason_handler.fcgi > bin/mason_handler.fcgi.1
 
 %install
-rm -rf ${RPM_BUILD_ROOT}
+rm -rf %{buildroot}
 
-make install DESTDIR=${RPM_BUILD_ROOT}
+make install DESTDIR=%{buildroot}
 
 # Cleanup the mess rt's configuration leaves behind
-rm -f ${RPM_BUILD_ROOT}%{_docdir}/README
+rm -f %{buildroot}%{_docdir}/README
 
 # Win32 stuff
-rm -f ${RPM_BUILD_ROOT}%{RT3_BINDIR}/mason_handler.svc
+rm -f %{buildroot}%{RT_BINDIR}/mason_handler.svc
 
 # We don't want CPAN
-rm -f ${RPM_BUILD_ROOT}%{_sbindir}/rt-test-dependencies
+rm -f %{buildroot}%{_sbindir}/rt-test-dependencies
 
 # An installed testsuite without infrastructure
-rm -rf ${RPM_BUILD_ROOT}%{RT3_LIBDIR}/t
+rm -rf %{buildroot}%{RT_LIBDIR}/t
 
 # Bogus
-rm -f ${RPM_BUILD_ROOT}%{RT3_LIBDIR}/RT.pm.in
+rm -f %{buildroot}%{RT_LIBDIR}/RT.pm.in
 
 # Unsupported
-rm -f ${RPM_BUILD_ROOT}%{RT3_BINDIR}/*.scgi
+rm -f %{buildroot}%{RT_BINDIR}/*.scgi
 
 # Install apache configuration
-mkdir -p ${RPM_BUILD_ROOT}%{_sysconfdir}/httpd/conf/webapps.d
-sed -e 's,@RT3_WWWDIR@,%{RT3_WWWDIR},g' \
-  -e 's,@RT3_BINDIR@,%{RT3_BINDIR},g' \
-  %{SOURCE3} > ${RPM_BUILD_ROOT}%{_sysconfdir}/httpd/conf/webapps.d/rt3.conf
+mkdir -p %{buildroot}%{_sysconfdir}/httpd/conf/webapps.d
+sed -e 's,@RT_WWWDIR@,%{RT_WWWDIR},g' \
+  -e 's,@RT_BINDIR@,%{RT_BINDIR},g' \
+  %{SOURCE3} > %{buildroot}%{_sysconfdir}/httpd/conf/webapps.d/rt.conf
 
-mkdir -p ${RPM_BUILD_ROOT}%{_mandir}/man1
+mkdir -p %{buildroot}%{_mandir}/man1
 install -m 0644 bin/rt-mailgate.1 bin/mason_handler.fcgi.1 \
-  ${RPM_BUILD_ROOT}%{_mandir}/man1
+  %{buildroot}%{_mandir}/man1
 
-if [ "%{_bindir}" != "%{RT3_BINDIR}" ]; then
-  mkdir -p ${RPM_BUILD_ROOT}%{_bindir}
-  mv ${RPM_BUILD_ROOT}%{RT3_BINDIR}/rt \
-    ${RPM_BUILD_ROOT}%{_bindir}
+if [ "%{_bindir}" != "%{RT_BINDIR}" ]; then
+  mkdir -p %{buildroot}%{_bindir}
+  mv %{buildroot}%{RT_BINDIR}/rt \
+    %{buildroot}%{_bindir}
 fi
 
-install -d -m755 ${RPM_BUILD_ROOT}%{_prefix}/local/etc/rt3
-install -d -m755 ${RPM_BUILD_ROOT}%{_prefix}/local/lib/rt3
-install -d -m755 ${RPM_BUILD_ROOT}%{_prefix}/local/lib/rt3/html
-install -d -m755 ${RPM_BUILD_ROOT}%{_prefix}/local/lib/rt3/po
-install -d -m755 ${RPM_BUILD_ROOT}%{_prefix}/local/lib/rt3/lib
+install -d -m755 %{buildroot}%{_prefix}/local/etc/rt
+install -d -m755 %{buildroot}%{_prefix}/local/lib/rt
+install -d -m755 %{buildroot}%{_prefix}/local/lib/rt/html
+install -d -m755 %{buildroot}%{_prefix}/local/lib/rt/po
+install -d -m755 %{buildroot}%{_prefix}/local/lib/rt/lib
 
-install -d -m755 ${RPM_BUILD_ROOT}%{RT3_LOGDIR}
+install -d -m755 %{buildroot}%{RT_LOGDIR}
 
 # install log rotation stuff
-mkdir -p ${RPM_BUILD_ROOT}%{_sysconfdir}/logrotate.d
-install -m 644 rt3.logrotate ${RPM_BUILD_ROOT}%{_sysconfdir}/logrotate.d/rt3
+mkdir -p %{buildroot}%{_sysconfdir}/logrotate.d
+install -m 644 rt.logrotate %{buildroot}%{_sysconfdir}/logrotate.d/rt
 
-install -d -m755 ${RPM_BUILD_ROOT}%{RT3_LOCALSTATEDIR}
+install -d -m755 %{buildroot}%{RT_LOCALSTATEDIR}
 
-install -d -m755 ${RPM_BUILD_ROOT}%{_sysconfdir}/rt3/upgrade
-cp -R etc/upgrade/* ${RPM_BUILD_ROOT}%{_sysconfdir}/rt3/upgrade
-rm -f ${RPM_BUILD_ROOT}%{_sysconfdir}/rt3/upgrade/*.in
+install -d -m755 %{buildroot}%{_sysconfdir}/rt/upgrade
+cp -R etc/upgrade/* %{buildroot}%{_sysconfdir}/rt/upgrade
+rm -f %{buildroot}%{_sysconfdir}/rt/upgrade/*.in
 
 # Fix permissions
-find ${RPM_BUILD_ROOT}%{RT3_WWWDIR} \
+find %{buildroot}%{RT_WWWDIR} \
   -type f -exec chmod a-x {} \;
 
 %check
 # The tests don't work:
 # - Require to be run as root
-# - Require an operational rt3 system
+# - Require an operational rt system
 # - Require packages which are n/a in Fedora
 %{?with_tests:make test}
 
@@ -360,11 +360,11 @@ find ${RPM_BUILD_ROOT}%{RT3_WWWDIR} \
 %_postun_webapp
 %endif
 if [ "$1" = "0" ]; then
-  /bin/rm -rf %{RT3_CACHEDIR}
+  /bin/rm -rf %{RT_CACHEDIR}
 fi
                     
 %clean
-rm -rf ${RPM_BUILD_ROOT}
+rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root,-)
@@ -374,33 +374,33 @@ rm -rf ${RPM_BUILD_ROOT}
 %exclude %{_sbindir}/rt-mailgate
 %{_mandir}/man1/*
 %exclude %{_mandir}/man1/rt-mailgate*
-%{RT3_LIBDIR}/*
-%exclude %{RT3_LIBDIR}/RT/Test*
-%attr(0700,apache,apache) %{RT3_LOGDIR}
+%{RT_LIBDIR}/*
+%exclude %{RT_LIBDIR}/RT/Test*
+%attr(0700,apache,apache) %{RT_LOGDIR}
 
-%dir %{_sysconfdir}/rt3
-%attr(-,root,root)%{_sysconfdir}/rt3/upgrade
-%attr(-,root,root)%{_sysconfdir}/rt3/acl*
-%attr(-,root,root)%{_sysconfdir}/rt3/schema*
-%attr(-,root,root)%{_sysconfdir}/rt3/init*
-%config(noreplace) %attr(0640,root,root) %{_sysconfdir}/rt3/RT_*
+%dir %{_sysconfdir}/rt
+%attr(-,root,root)%{_sysconfdir}/rt/upgrade
+%attr(-,root,root)%{_sysconfdir}/rt/acl*
+%attr(-,root,root)%{_sysconfdir}/rt/schema*
+%attr(-,root,root)%{_sysconfdir}/rt/init*
+%config(noreplace) %attr(0640,root,root) %{_sysconfdir}/rt/RT_*
 
-%config(noreplace) %{_sysconfdir}/logrotate.d/rt3
+%config(noreplace) %{_sysconfdir}/logrotate.d/rt
 
-%dir %{_datadir}/rt3
-%{RT3_WWWDIR}
-%config(noreplace) %{_sysconfdir}/httpd/conf/webapps.d/rt3.conf
+%dir %{_datadir}/rt
+%{RT_WWWDIR}
+%config(noreplace) %{_sysconfdir}/httpd/conf/webapps.d/rt.conf
 
-%dir %{RT3_CACHEDIR}
-%attr(0770,apache,apache) %{RT3_CACHEDIR}/mason_data
-%attr(0770,apache,apache) %{RT3_CACHEDIR}/session_data
+%dir %{RT_CACHEDIR}
+%attr(0770,apache,apache) %{RT_CACHEDIR}/mason_data
+%attr(0770,apache,apache) %{RT_CACHEDIR}/session_data
 
-%if "%{RT3_LOCALSTATEDIR}" != "%{RT3_CACHEDIR}"
-%dir %{RT3_LOCALSTATEDIR}
+%if "%{RT_LOCALSTATEDIR}" != "%{RT_CACHEDIR}"
+%dir %{RT_LOCALSTATEDIR}
 %endif
 
-%ghost %{_prefix}/local/lib/rt3
-%ghost %{_prefix}/local/etc/rt3
+%ghost %{_prefix}/local/lib/rt
+%ghost %{_prefix}/local/etc/rt
 
 %files mailgate
 %defattr(-,root,root,-)
