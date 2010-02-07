@@ -170,6 +170,7 @@ Requires: rt-mailgate
 Requires(pre): rpm-helper
 Requires(postun): rpm-helper
 %endif
+Obsoletes:  rt3
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
