@@ -40,8 +40,8 @@
 
 Summary:	Request tracker 3
 Name:		rt
-Version:	3.8.1
-Release:	%mkrel 6
+Version:	3.8.9
+Release:	%mkrel 1
 Group:		System/Servers
 License:	GPLv2+
 URL:		http://www.bestpractical.com/rt
@@ -49,7 +49,7 @@ Source0:	http://www.bestpractical.com/pub/rt/release/rt-%{version}.tar.gz
 Source3:	rt.conf.in
 Source4:	README.fedora.in
 Source5:	rt.logrotate.in
-Patch0:		rt-3.8.1-config.diff
+Patch0:		rt-3.8.9-config.diff
 Patch1:		rt-3.4.1-I18N.diff
 Patch2:		rt-3.8.1-Makefile.diff
 Patch3:		rt-3.8.1-test-dependencies.diff
@@ -344,6 +344,9 @@ rm -f %{buildroot}%{_sysconfdir}/rt/upgrade/*.in
 find %{buildroot}%{RT_WWWDIR} \
   -type f -exec chmod a-x {} \;
 
+rm -Rf %{buildroot}/%{RT_LIBDIR}/RT/Test*
+mkdir -p %{buildroot}/%{_datadir}/fonts
+mv %{buildroot}/Droid* %{buildroot}/%{_datadir}/fonts
 %check
 # The tests don't work:
 # - Require to be run as root
@@ -376,7 +379,6 @@ rm -rf %{buildroot}
 %{_mandir}/man1/*
 %exclude %{_mandir}/man1/rt-mailgate*
 %{RT_LIBDIR}/*
-%exclude %{RT_LIBDIR}/RT/Test*
 %attr(0700,apache,apache) %{RT_LOGDIR}
 
 %dir %{_sysconfdir}/rt
@@ -399,6 +401,8 @@ rm -rf %{buildroot}
 %if "%{RT_LOCALSTATEDIR}" != "%{RT_CACHEDIR}"
 %dir %{RT_LOCALSTATEDIR}
 %endif
+
+%{_datadir}/fonts/Droid*
 
 %ghost %{_prefix}/local/lib/rt
 %ghost %{_prefix}/local/etc/rt
