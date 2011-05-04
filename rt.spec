@@ -40,7 +40,7 @@
 
 Summary:	Request tracker 3
 Name:		rt
-Version:	3.8.9
+Version:	3.8.10
 Release:	%mkrel 1
 Group:		System/Servers
 License:	GPLv2+
