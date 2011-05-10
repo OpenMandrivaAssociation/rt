@@ -142,6 +142,7 @@ BuildRequires: perl(UNIVERSAL::require)
 %{?with_devel_mode:BuildRequires: perl(WWW::Mechanize)}
 BuildRequires: perl(XML::RSS) >= 1.05
 %{?with_devel_mode:BuildRequires: perl(XML::Simple)}
+BuildRequires: perl(Digest::SHA)
 BuildRequires:	/usr/bin/pod2man
 BuildRequires:	apache-devel
 Requires(postun): /bin/rm
