@@ -1,0 +1,10 @@
+--- rt-3.4.1.orig/lib/RT/I18N.pm	2005-04-08 06:40:50.157094885 +0200
++++ rt-3.4.1/lib/RT/I18N.pm	2005-04-08 06:40:50.158094583 +0200
+@@ -118,6 +118,7 @@
+ 	_decode	=> 1, map {
+ 	    $_	=> [
+ 		Gettext => (substr(__FILE__, 0, -3) . "/$_.po"),
++		Gettext => (substr(__FILE__, 0, -3) . "/*/$_.po"),
+ 		Gettext => "$RT::LocalLexiconPath/*/$_.po",
+ 		Gettext => "$RT::LocalLexiconPath/$_.po",
+ 	    ],

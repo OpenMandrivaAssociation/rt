@@ -1,0 +1,18 @@
+--- rt-3.8.1.orig/etc/RT_SiteConfig.pm	2008-08-18 17:14:12.000000000 +0200
++++ rt-3.8.1/etc/RT_SiteConfig.pm	2008-09-08 16:43:16.000000000 +0200
+@@ -15,5 +15,14 @@
+ #   perl -c /path/to/your/etc/RT_SiteConfig.pm
+ 
+ Set( $rtname, 'example.com');
+-#Set(@Plugins,(qw(Extension::QuickDelete RT::FM)));
++
++# Set( $Organization , "example.com");
++
++# Look into the zoneinfo database for valid values (/usr/share/zoneinfo/)
++# Set( $Timezone , 'US/Eastern');
++
++# Set( $WebBaseURL , "http://localhost");
++
++Set( $WebPath , "/rt3");
++
+ 1;

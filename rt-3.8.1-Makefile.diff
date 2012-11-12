@@ -1,0 +1,20 @@
+--- rt-3.8.9/Makefile.in~	2011-02-15 22:58:29.000000000 +0100
++++ rt-3.8.9/Makefile.in	2011-03-24 14:13:20.000000000 +0100
+@@ -287,7 +287,7 @@
+ 	@echo "    $(RT_SBIN_PATH)/rt-setup-database --dba $(DB_DBA) --prompt-for-dba-password --action upgrade"
+ 
+ 
+-upgrade: testdeps config-install dirs files-install fixperms upgrade-instruct
++upgrade: testdeps config-install dirs files-install upgrade-instruct
+ 
+ upgrade-noclobber: config-install dirs libs-install html-install bin-install local-install doc-install font-install fixperms
+ 
+@@ -368,7 +368,7 @@
+ 	$(INSTALL) -m 0755 -d $(DESTDIR)$(LOCAL_LEXICON_PATH)
+ # }}}
+ 
+-install: testdeps config-install dirs files-install fixperms instruct
++install: testdeps config-install dirs files-install instruct
+ 
+ files-install: libs-install etc-install config-install bin-install sbin-install html-install local-install doc-install font-install
+ 

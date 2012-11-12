@@ -1,0 +1,10 @@
+--- rt-3.8.1.orig/sbin/rt-test-dependencies.in	2008-09-22 10:24:58.000000000 +0200
++++ rt-3.8.1/sbin/rt-test-dependencies.in	2008-08-18 17:13:58.000000000 +0200
+@@ -280,7 +280,6 @@
+ 
+ $deps{'DEV'} = [ text_to_hash( << '.') ];
+ HTML::Form
+-HTML::TokeParser
+ WWW::Mechanize
+ Test::WWW::Mechanize 1.04
+ Module::Refresh 0.03

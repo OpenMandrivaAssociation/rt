@@ -1,0 +1,5 @@
+sources:
+  "README.fedora.in:"	edd41eb8375f82478eb03bd45294c7fbf2f65b3f
+  "rt-3.8.11.tar.gz:"	96fe9babdca88224d6c8f2352f08bd62d613770d
+  "rt.conf.in:"	17e4b52b30583691b55dbfc2bed5b86d6332a70e
+  "rt.logrotate.in:"	c140d4855938fc1e26580604670cecf05ae0e8de
