@@ -1,0 +1,32 @@
+Alias /rt3 "@RT3_WWWDIR@"
+
+PerlRequire @RT3_BINDIR@/webmux.pl
+
+<Directory "@RT3_WWWDIR@">
+
+  Order Deny,Allow
+  Deny from All
+  Allow from All
+
+  AllowOverride All
+  Options ExecCGI FollowSymLinks
+
+  RewriteEngine On
+  RedirectMatch permanent (.*)/$ $1/index.html
+  AddDefaultCharset UTF-8
+  SetHandler perl-script
+  PerlHandler RT::Mason
+
+</Directory>
+
+# Uncomment the following lines to force a redirect to a working 
+# SSL aware apache server. This serves as an example.
+# 
+#<IfModule mod_ssl.c>
+#    <LocationMatch /rt3>
+#        Options FollowSymLinks
+#        RewriteEngine on
+#        RewriteCond %{SERVER_PORT} !^443$
+#        RewriteRule ^.*$ https://%{SERVER_NAME}%{REQUEST_URI} [L,R]
+#    </LocationMatch>
+#</IfModule>

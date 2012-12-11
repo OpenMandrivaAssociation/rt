@@ -1,3 +1,6 @@
+# We cannot fix this package neither now nor later, just ignore rpmlint
+%define _build_pkgcheck_set %{nil}
+
 #
 # Copyright (c) 2005, 2006, 2007, 2008 Ralf Corsepius, Ulm, Germany.
 # This file and all modifications and additions to the pristine
@@ -355,24 +358,7 @@ mv %{buildroot}/Droid* %{buildroot}/%{_datadir}/fonts
 # - Require packages which are n/a in Fedora
 %{?with_tests:make test}
 
-%post
-%if %mdkversion < 201010
-%_post_webapp
-%endif
-    
-%postun
-%if %mdkversion < 201010
-%_postun_webapp
-%endif
-if [ "$1" = "0" ]; then
-  /bin/rm -rf %{RT_CACHEDIR}
-fi
-                    
-%clean
-rm -rf %{buildroot}
-
 %files
-%defattr(-,root,root,-)
 %doc COPYING README UPGRADING README.fedora
 %{_bindir}/*
 %{_sbindir}/*
@@ -412,3 +398,60 @@ rm -rf %{buildroot}
 %defattr(-,root,root,-)
 %{_sbindir}/rt-mailgate
 %{_mandir}/man1/rt-mailgate*
+
+
+%changelog
+* Wed Dec 21 2011 Buchan Milne <bgmilne@mandriva.org> 3.8.11-1mdv2012.0
++ Revision: 744125
+- update to new version 3.8.11
+
+* Tue May 10 2011 Buchan Milne <bgmilne@mandriva.org> 3.8.10-1
++ Revision: 673249
+- BR Digest::SHA
+- update to new version 3.8.10
+- New version 3.8.9
+
+  + Oden Eriksson <oeriksson@mandriva.com>
+    - the mass rebuild of 2010.1 packages
+
+* Sun Feb 07 2010 Guillaume Rousse <guillomovitch@mandriva.org> 3.8.1-5mdv2010.1
++ Revision: 501711
+- obsoletes rt3
+- package renaming
+- rename to rt
+- rely on filetrigger for reloading apache configuration begining with 2010.1, rpm-helper macros otherwise
+
+* Tue Sep 15 2009 Thierry Vignaud <tv@mandriva.org> 3.8.1-4mdv2010.0
++ Revision: 442765
+- rebuild
+
+* Thu Dec 04 2008 Oden Eriksson <oeriksson@mandriva.com> 3.8.1-3mdv2009.1
++ Revision: 310054
+- whoops! fix the apache config as well..., duh!
+- woops!, forgot to restart apache
+
+* Thu Dec 04 2008 Oden Eriksson <oeriksson@mandriva.com> 3.8.1-1mdv2009.1
++ Revision: 310048
+- rpmlint fixes
+- fix deps (apache-devel)
+- import rt3
+
+
+* Fri Feb 09 2007 Michael Scherer <misc@mandriva.org> 3.6.3-1mdv2007.0
++ Revision: 118341
+- update to 3.6.3
+- Import rt
+
+* Fri Jul 21 2006 Michael Scherer <misc@mandriva.org> 3.4.5-1mdv2007.0
+- New version 3.4.5
+
+* Fri Jan 06 2006 Michael Scherer <misc@mandriva.org> 3.4.4-2mdk
+- remove the ifModule line from apache config file, as reported by Anne Nicolas
+- complete the Readme.Mandriva file
+- remove dependencie that are now detected by the script
+- correct rpmlint error
+
+* Sat Oct 15 2005 Michael Scherer <misc@mandriva.org> 3.4.4-1mdk
+- first package, based on fedora package from Ralf Corsépius <rc040203@freenet.de> 
+- Birthday build for rgs \o/
+
