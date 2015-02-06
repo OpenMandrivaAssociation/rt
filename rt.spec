@@ -44,7 +44,7 @@
 Summary:	Request tracker 3
 Name:		rt
 Version:	3.8.11
-Release:	%mkrel 1
+Release:	2
 Group:		System/Servers
 License:	GPLv2+
 URL:		http://www.bestpractical.com/rt
