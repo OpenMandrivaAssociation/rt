@@ -47,7 +47,7 @@ Version:	3.8.11
 Release:	2
 Group:		System/Servers
 License:	GPLv2+
-URL:		http://www.bestpractical.com/rt
+URL:		https://www.bestpractical.com/rt
 Source0:	http://www.bestpractical.com/pub/rt/release/rt-%{version}.tar.gz
 Source3:	rt.conf.in
 Source4:	README.fedora.in
